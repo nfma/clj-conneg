@@ -8,8 +8,8 @@
 ;;;   
 
 (ns com.twinql.clojure.conneg
-  (:refer-clojure)
-  (:require [clojure.contrib.str-utils :as str-utils]))
+  (:use [clojure.string :only (split)])
+  (:refer-clojure))
 
 (def accept-fragment-re
   #"^(\*|[^()<>@,;:\"/\[\]?={}         ]+)/(\*|[^()<>@,;:\"/\[\]?={}         ]+)$")
@@ -66,7 +66,7 @@
   weight to a format."
 
   ([f]
-   (let [parts (str-utils/re-split #"\s*;\s*" f)]
+   (let [parts (split f #"\s*;\s*")]
      (when (not (empty? parts))
        ;; First part will be a type.
        (let [type-str (first parts)
@@ -84,7 +84,7 @@
 (defn sorted-accept [h]
   (sort-by-q
     (map accept-fragment
-         (str-utils/re-split #"\s*,\s*" h))))
+         (split h #"\s*,\s*"))))
 
 (defn acceptable-type
   "Compare two type pairs. If the pairing is acceptable,
